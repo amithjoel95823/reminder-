@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Deadline Board — a vibrant visual notice board for important dates and deadlines.">
+  <title>Deadline Board</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="toast" class="toast"></div>
+
+  <aside class="sidebar">
+    <div>
+      <div class="logo">
+        <div class="logo-icon">✓</div>
+        <div><strong>Deadline</strong><span>Board</span></div>
+      </div>
+
+      <nav>
+        <button class="nav-btn active" data-view="overview"><span>⌂</span> Overview</button>
+        <button class="nav-btn" data-view="calendar"><span>▦</span> Calendar</button>
+        <button class="nav-btn" data-view="board"><span>▤</span> Notice board</button>
+      </nav>
+
+      <div class="side-label">Quick filters</div>
+      <button class="filter-btn" data-filter="urgent"><i class="dot red"></i> Urgent <b id="urgentCount">0</b></button>
+      <button class="filter-btn" data-filter="soon"><i class="dot amber"></i> Coming up <b id="soonCount">0</b></button>
+      <button class="filter-btn" data-filter="plenty"><i class="dot green"></i> Plenty of time <b id="plentyCount">0</b></button>
+    </div>
+
+    <div class="sidebar-bottom">
+      <div class="legend">
+        <div><i class="dot red"></i><span>Urgent</span></div>
+        <div><i class="dot amber"></i><span>Coming up</span></div>
+        <div><i class="dot green"></i><span>Plenty of time</span></div>
+      </div>
+      <button id="resetBtn" class="reset-btn">↻ Reset demo dates</button>
+    </div>
+  </aside>
+
+  <main>
+    <header class="topbar">
+      <div>
+        <p class="kicker">Your visual reminder</p>
+        <h1 id="greeting">Good evening.</h1>
+      </div>
+      <button id="addBtn" class="primary-btn">＋ Add deadline</button>
+    </header>
+
+    <section id="overviewView" class="view">
+      <div class="hero">
+        <div class="hero-copy">
+          <span class="hero-chip">STAY AHEAD</span>
+          <h2>See what needs<br><em>your attention.</em></h2>
+          <p>One calm place for assignments, events, renewals and every date you don't want to miss.</p>
+          <button class="hero-btn" id="calendarHeroBtn">Open calendar →</button>
+        </div>
+        <div class="hero-art">
+          <div class="sun"></div>
+          <div class="paper p1"><span>FRI</span><b>18</b></div>
+          <div class="paper p2"><span>MON</span><b>21</b></div>
+          <div class="paper p3"><span>WED</span><b>30</b></div>
+          <div class="pin"></div>
+          <div class="spark s1">✦</div><div class="spark s2">✧</div>
+        </div>
+      </div>
+
+      <div class="stat-grid">
+        <article class="stat">
+          <span>All deadlines</span><strong id="totalStat">0</strong><small>on your board</small>
+        </article>
+        <article class="stat urgent-stat">
+          <span>Need attention</span><strong id="urgentStat">0</strong><small>within 3 days</small>
+        </article>
+        <article class="stat safe-stat">
+          <span>Breathing room</span><strong id="safeStat">0</strong><small>more than 7 days away</small>
+        </article>
+        <article class="stat">
+          <span>Next deadline</span><strong id="nextStat">—</strong><small id="nextSub">nothing scheduled</small>
+        </article>
+      </div>
+
+      <div class="section-head">
+        <div><p class="kicker">Priority queue</p><h3>What’s coming up</h3></div>
+        <button class="text-btn" id="boardBtn">View all →</button>
+      </div>
+      <div id="priorityList" class="deadline-grid"></div>
+    </section>
+
+    <section id="calendarView" class="view hidden">
+      <div class="view-head">
+        <div><p class="kicker">Monthly view</p><h2>Calendar</h2></div>
+        <button class="today-btn" id="todayBtn">Today</button>
+      </div>
+      <div class="calendar-shell">
+        <div class="calendar-top">
+          <button class="round-btn" id="prevMonth">‹</button>
+          <h3 id="monthTitle"></h3>
+          <button class="round-btn" id="nextMonth">›</button>
+        </div>
+        <div class="weekday-row">
+          <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+        </div>
+        <div id="calendarGrid" class="calendar-grid"></div>
+        <div id="dayDetails" class="day-details">
+          <div><span class="detail-dot"></span><strong>Select a date</strong><p>Deadlines for that day will appear here.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="boardView" class="view hidden">
+      <div class="view-head">
+        <div><p class="kicker">Pinboard</p><h2>Notice board</h2></div>
+        <div class="board-tools">
+          <select id="categoryFilter">
+            <option value="all">All categories</option>
+            <option value="Study">Study</option>
+            <option value="Work">Work</option>
+            <option value="Personal">Personal</option>
+            <option value="Finance">Finance</option>
+            <option value="Events">Events</option>
+          </select>
+          <select id="statusFilter">
+            <option value="all">All urgency</option>
+            <option value="urgent">Urgent</option>
+            <option value="soon">Coming up</option>
+            <option value="plenty">Plenty of time</option>
+          </select>
+        </div>
+      </div>
+      <div id="boardList" class="board-list"></div>
+    </section>
+  </main>
+
+  <div id="modal" class="modal-backdrop hidden">
+    <div class="modal">
+      <div class="modal-head">
+        <div><p class="kicker">New reminder</p><h2 id="modalTitle">Add a deadline</h2></div>
+        <button class="close-btn" id="closeModal">×</button>
+      </div>
+      <form id="deadlineForm">
+        <input type="hidden" id="editId">
+        <label>What is it?<input id="titleInput" maxlength="70" placeholder="e.g. Submit project proposal" required></label>
+        <div class="form-row">
+          <label>Date<input id="dateInput" type="date" required></label>
+          <label>Time<input id="timeInput" type="time" value="17:00"></label>
+        </div>
+        <div class="form-row">
+          <label>Category
+            <select id="categoryInput">
+              <option>Study</option><option>Work</option><option>Personal</option><option>Finance</option><option>Events</option>
+            </select>
+          </label>
+          <label>Importance
+            <select id="importanceInput">
+              <option value="urgent">Urgent</option><option value="soon">Coming up</option><option value="plenty">Plenty of time</option>
+            </select>
+          </label>
+        </div>
+        <label>Note<textarea id="noteInput" rows="3" placeholder="Optional details..."></textarea></label>
+        <div class="modal-actions"><button type="button" class="secondary-btn" id="cancelBtn">Cancel</button><button class="primary-btn">Save reminder</button></div>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
